@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Sentient Signals — Emotion-Aware AI Trading Intelligence</title>
+  <meta name="description" content="Sentient Signals is an emotion-aware AI trading intelligence layer for behavioral market analysis, sentiment detection, volatility signals, and SOVRA-powered decision support." />
+  <meta property="og:title" content="Sentient Signals — Emotion-Aware AI Trading Intelligence" />
+  <meta property="og:description" content="Behavioral market intelligence, emotional sentiment analysis, AI signals, volatility mapping, and trading decision support inside the SOVRA / Entelekron ecosystem." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#f7fbff" />
+  <link rel="canonical" href="https://sentientsignals.io/" />
+
+  <style>
+    :root {
+      --bg: #f7fbff;
+      --ink: #07111f;
+      --muted: #627086;
+      --line: rgba(15,23,42,.12);
+      --red: #ef4444;
+      --orange: #f97316;
+      --gold: #d6a84f;
+      --blue: #2563eb;
+      --cyan: #06b6d4;
+      --violet: #7c3aed;
+      --emerald: #10b981;
+      --dark: #020617;
+      --shadow: 0 28px 90px rgba(15,23,42,.13);
+      --radius: 30px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 8%, rgba(239,68,68,.15), transparent 34rem),
+        radial-gradient(circle at 88% 12%, rgba(37,99,235,.18), transparent 34rem),
+        radial-gradient(circle at 50% 62%, rgba(124,58,237,.12), transparent 42rem),
+        linear-gradient(180deg, #ffffff 0%, #f7fbff 54%, #eef7ff 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(15,23,42,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15,23,42,.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 78%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1200px, calc(100% - 40px)); margin: 0 auto; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.78);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 950;
+      letter-spacing: -.05em;
+      font-size: 1.22rem;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: conic-gradient(from 180deg, var(--red), var(--orange), var(--gold), var(--blue), var(--violet), var(--red));
+      box-shadow: 0 16px 42px rgba(239,68,68,.22);
+      position: relative;
+    }
+
+    .brand-mark::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,.92);
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      background: white;
+      box-shadow:
+        -12px -2px 0 -6px white,
+        12px 2px 0 -6px white,
+        0 12px 0 -6px white;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-weight: 750;
+      font-size: .92rem;
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+
+    .nav-cta {
+      color: white !important;
+      background: var(--dark);
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+      box-shadow: 0 14px 34px rgba(2,6,23,.17);
+    }
+
+    .language-wrap { position: relative; display: inline-flex; align-items: center; }
+
+    .language-select {
+      appearance: none;
+      -webkit-appearance: none;
+      min-height: 42px;
+      max-width: 150px;
+      padding: 0 38px 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.88);
+      color: var(--ink);
+      font-weight: 850;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .language-wrap::after {
+      content: "⌄";
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-55%);
+      color: var(--muted);
+      pointer-events: none;
+      font-weight: 950;
+    }
+
+    .mobile-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .mobile-toggle span {
+      width: 20px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 999px;
+      transition: .18s;
+    }
+
+    .mobile-menu {
+      display: none;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(18px);
+    }
+
+    .mobile-menu-inner {
+      width: min(1200px, calc(100% - 40px));
+      margin: 0 auto;
+      display: grid;
+      gap: 10px;
+      padding: 16px 0 22px;
+    }
+
+    .mobile-menu a, .mobile-menu label {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: white;
+      font-weight: 850;
+    }
+
+    .mobile-menu label {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .mobile-menu .language-select { max-width: none; width: 100%; border-radius: 14px; background: var(--bg); }
+
+    body.menu-open .mobile-menu { display: block; }
+    body.menu-open .mobile-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    body.menu-open .mobile-toggle span:nth-child(2) { opacity: 0; }
+    body.menu-open .mobile-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .hero { padding: 96px 0 76px; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.06fr .94fr;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 900;
+      box-shadow: 0 10px 34px rgba(15,23,42,.07);
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--red);
+      box-shadow: 0 0 0 7px rgba(239,68,68,.13);
+    }
+
+    h1 {
+      margin: 24px 0 18px;
+      font-size: clamp(3.1rem, 8.8vw, 7.6rem);
+      line-height: .86;
+      letter-spacing: -.095em;
+      font-weight: 950;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #020617 4%, var(--red), var(--orange), var(--blue), var(--violet));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      margin: 0 0 22px;
+      max-width: 900px;
+      font-size: clamp(1.36rem, 3vw, 2.45rem);
+      line-height: 1.06;
+      letter-spacing: -.06em;
+      font-weight: 920;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.78;
+    }
+
+    .disclosure {
+      margin-top: 20px;
+      max-width: 780px;
+      padding: 14px 16px;
+      border: 1px solid rgba(239,68,68,.20);
+      border-radius: 20px;
+      background: rgba(255,255,255,.72);
+      color: #7b3f3f;
+      font-size: .92rem;
+      line-height: 1.55;
+      font-weight: 650;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+
+    .btn {
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      font-weight: 900;
+      transition: .18s;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary {
+      color: white;
+      border: none;
+      background: linear-gradient(135deg, var(--red), var(--blue));
+      box-shadow: 0 20px 52px rgba(239,68,68,.20);
+    }
+
+    .signal-card {
+      min-height: 560px;
+      border-radius: 42px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 50% 42%, rgba(239,68,68,.18), transparent 15rem),
+        radial-gradient(circle at 76% 18%, rgba(37,99,235,.22), transparent 16rem),
+        radial-gradient(circle at 30% 72%, rgba(124,58,237,.13), transparent 16rem),
+        linear-gradient(180deg, rgba(255,255,255,.86), rgba(238,247,255,.82));
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      padding: 26px;
+    }
+
+    .signal-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(15,23,42,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15,23,42,.045) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at center, black, transparent 76%);
+    }
+
+    .wave {
+      position: absolute;
+      left: 30px;
+      right: 30px;
+      top: 90px;
+      height: 290px;
+      z-index: 2;
+      opacity: .95;
+    }
+
+    .wave svg { width: 100%; height: 100%; overflow: visible; }
+    .wave path {
+      fill: none;
+      stroke-width: 6;
+      stroke-linecap: round;
+      filter: drop-shadow(0 16px 30px rgba(37,99,235,.18));
+      animation: waveMove 7s ease-in-out infinite;
+    }
+    .wave .p1 { stroke: url(#g1); }
+    .wave .p2 { stroke: rgba(239,68,68,.45); stroke-width: 3; animation-delay: -1s; }
+    .wave .p3 { stroke: rgba(16,185,129,.45); stroke-width: 3; animation-delay: -2s; }
+
+    @keyframes waveMove {
+      0%, 100% { transform: translateX(0) scaleY(1); }
+      50% { transform: translateX(-18px) scaleY(1.08); }
+    }
+
+    .emotion-node {
+      position: absolute;
+      z-index: 4;
+      width: 78px;
+      height: 78px;
+      border-radius: 26px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 950;
+      letter-spacing: -.04em;
+      box-shadow: 0 24px 60px rgba(15,23,42,.18);
+      border: 1px solid rgba(255,255,255,.42);
+      font-size: .82rem;
+    }
+
+    .fear { left: 44px; top: 128px; background: linear-gradient(135deg, var(--red), var(--orange)); }
+    .greed { right: 44px; top: 128px; background: linear-gradient(135deg, var(--emerald), var(--cyan)); }
+    .vol { left: 60px; bottom: 184px; background: linear-gradient(135deg, var(--violet), var(--blue)); }
+    .signal { right: 60px; bottom: 184px; background: linear-gradient(135deg, var(--blue), var(--cyan)); }
+    .core { left: 50%; top: 42%; transform: translate(-50%, -50%); width: 104px; height: 104px; border-radius: 34px; background: linear-gradient(135deg, var(--red), var(--blue), var(--violet)); font-size: .9rem; }
+
+    .float-chip {
+      position: absolute;
+      z-index: 5;
+      padding: 10px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.9);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 850;
+      box-shadow: 0 16px 38px rgba(15,23,42,.10);
+    }
+
+    .chip1 { top: 34px; left: 34px; }
+    .chip2 { top: 74px; right: 34px; }
+    .chip3 { bottom: 146px; left: 46px; }
+
+    .status-card {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 28px;
+      z-index: 6;
+      padding: 22px;
+      border-radius: 26px;
+      color: white;
+      background: rgba(2,6,23,.93);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 22px 60px rgba(2,6,23,.28);
+    }
+
+    .status-card strong { display: block; margin-bottom: 8px; font-size: 1.14rem; letter-spacing: -.04em; }
+    .status-card p { margin: 0; color: #dbeafe; line-height: 1.65; }
+
+    section { padding: 84px 0; }
+    .section-head { max-width: 880px; margin-bottom: 36px; }
+    .kicker {
+      margin-bottom: 12px;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-size: .8rem;
+      font-weight: 950;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4.4vw, 4rem);
+      line-height: .98;
+      letter-spacing: -.07em;
+      font-weight: 950;
+    }
+
+    .section-text { margin-top: 18px; color: var(--muted); font-size: 1.02rem; line-height: 1.75; }
+
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    .statement {
+      padding: 38px;
+      border-radius: 32px;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .statement.big { color: white; background: linear-gradient(135deg, var(--red), var(--blue)); }
+    .statement h3 { margin: 0 0 16px; font-size: 1.7rem; line-height: 1.08; letter-spacing: -.05em; }
+    .statement p { margin: 0; color: var(--muted); line-height: 1.75; }
+    .statement.big p { color: rgba(255,255,255,.88); }
+
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+    .card {
+      min-height: 232px;
+      padding: 26px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.84);
+      box-shadow: 0 16px 50px rgba(15,23,42,.08);
+    }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 17px;
+      color: var(--red);
+      font-weight: 950;
+      background: linear-gradient(135deg, rgba(239,68,68,.12), rgba(37,99,235,.12));
+    }
+
+    .card h3 { margin: 0 0 12px; font-size: 1.13rem; letter-spacing: -.035em; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.66; font-size: .96rem; }
+
+    .dark-band {
+      padding: 58px;
+      border-radius: 46px;
+      color: white;
+      background:
+        radial-gradient(circle at top left, rgba(239,68,68,.22), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(37,99,235,.26), transparent 34rem),
+        #020617;
+      box-shadow: var(--shadow);
+    }
+
+    .dark-band p, .dark-band .section-text { color: #dbeafe; opacity: .88; }
+
+    .stack { display: grid; grid-template-columns: .9fr 1.1fr; gap: 28px; align-items: start; }
+    .layers { display: grid; gap: 12px; }
+
+    .layer {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 20px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.07);
+    }
+
+    .layer span:first-child { font-weight: 900; }
+    .layer span:last-child { color: #93c5fd; font-size: .86rem; font-weight: 850; text-align: right; }
+
+    .process { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+    .process-step {
+      padding: 24px;
+      border-radius: 26px;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 42px rgba(15,23,42,.07);
+    }
+
+    .process-step strong { display: block; color: var(--red); margin-bottom: 12px; font-size: .9rem; }
+    .process-step h3 { margin: 0 0 10px; letter-spacing: -.04em; }
+    .process-step p { margin: 0; color: var(--muted); line-height: 1.65; }
+
+    .timeline { display: grid; gap: 16px; }
+
+    .step {
+      display: grid;
+      grid-template-columns: 94px 1fr;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: white;
+      box-shadow: 0 14px 42px rgba(15,23,42,.07);
+    }
+
+    .step strong { color: var(--red); }
+    .step h3 { margin: 0 0 8px; letter-spacing: -.035em; }
+    .step p { margin: 0; color: var(--muted); line-height: 1.68; }
+
+    .cta {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 28px;
+      padding: 58px;
+      border-radius: 44px;
+      color: white;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.24), transparent 25rem),
+        linear-gradient(135deg, #020617, #7f1d1d 42%, #1e3a8a 82%);
+      box-shadow: var(--shadow);
+    }
+
+    .cta p { color: #dbeafe; line-height: 1.75; opacity: .88; }
+    .cta .btn { color: white; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.18); }
+    .cta .btn.primary { background: linear-gradient(135deg, var(--red), var(--blue)); }
+
+    footer { padding: 40px 0 56px; color: var(--muted); font-size: .92rem; }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+    }
+
+    .footer-links { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    @media (max-width: 980px) {
+      .hero-grid, .split, .stack, .cta { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      .process { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .mobile-toggle { display: inline-flex; }
+      .dark-band, .cta { padding: 34px; border-radius: 32px; }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 28px, 1200px); }
+      .hero { padding-top: 56px; }
+      h1 { font-size: clamp(3rem, 17vw, 5rem); }
+      .cards, .process { grid-template-columns: 1fr; }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; }
+      .step { grid-template-columns: 1fr; }
+      .footer-row { flex-direction: column; }
+      .emotion-node { width: 58px; height: 58px; border-radius: 20px; font-size: .68rem; }
+      .core { width: 78px; height: 78px; font-size: .72rem; }
+      .fear { left: 28px; top: 145px; }
+      .greed { right: 28px; top: 145px; }
+      .vol { left: 34px; bottom: 200px; }
+      .signal { right: 34px; bottom: 200px; }
+      .chip2 { top: 82px; right: 22px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a href="/" class="brand" aria-label="Sentient Signals home">
+        <span class="brand-mark"></span>
+        <span>Sentient Signals</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#process">How It Works</a>
+        <a href="#ecosystem">Ecosystem</a>
+        <a href="#roadmap">Roadmap</a>
+        <span class="language-wrap">
+          <select class="language-select" aria-label="Select language" data-language-select>
+            <option value="/" selected>🇬🇧 English</option>
+            <option value="/de/">🇩🇪 Deutsch</option>
+            <option value="/tr/">🇹🇷 Türkçe</option>
+            <option value="/fr/">🇫🇷 Français</option>
+            <option value="/es/">🇪🇸 Español</option>
+            <option value="/it/">🇮🇹 Italiano</option>
+            <option value="/ru/">🇷🇺 Русский</option>
+          </select>
+        </span>
+        <a href="#contact" class="nav-cta">Contact</a>
+      </nav>
+
+      <button class="mobile-toggle" type="button" aria-label="Open menu" aria-expanded="false" data-mobile-toggle>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile-menu" data-mobile-menu>
+      <div class="mobile-menu-inner">
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#process">How It Works</a>
+        <a href="#ecosystem">Ecosystem</a>
+        <a href="#roadmap">Roadmap</a>
+        <label>
+          Language
+          <select class="language-select" aria-label="Select language" data-language-select>
+            <option value="/" selected>🇬🇧 English</option>
+            <option value="/de/">🇩🇪 Deutsch</option>
+            <option value="/tr/">🇹🇷 Türkçe</option>
+            <option value="/fr/">🇫🇷 Français</option>
+            <option value="/es/">🇪🇸 Español</option>
+            <option value="/it/">🇮🇹 Italiano</option>
+            <option value="/ru/">🇷🇺 Русский</option>
+          </select>
+        </label>
+        <a href="#contact" class="nav-cta">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow"><span class="pulse"></span> Emotion-Aware AI · Market Psychology · Trading Intelligence</div>
+          <h1 class="gradient-text">Sentient Signals</h1>
+          <p class="subtitle">Behavioral market intelligence for a world where emotion moves price before logic catches up.</p>
+          <p class="lead">
+            Sentient Signals is the emotional intelligence and behavioral market analysis layer of the SOVRA / Entelekron ecosystem. It is designed to detect fear, greed, crowd pressure, news emotion, volatility stress, social narratives, and cross-market signal shifts before they become obvious on the chart.
+          </p>
+          <div class="disclosure">
+            Sentient Signals is an AI market intelligence concept. It is not financial advice, does not guarantee profit, and should never be used as the sole basis for trading or investment decisions. Live trading systems require risk controls, backtesting, compliance review, and human supervision.
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="#features">Explore Signals →</a>
+            <a class="btn" href="#process">How It Works</a>
+            <a class="btn" href="#contact">Partner Access</a>
+          </div>
+        </div>
+
+        <aside class="signal-card" aria-label="Sentient Signals emotional market intelligence visual">
+          <span class="float-chip chip1">Fear · Greed · Pressure</span>
+          <span class="float-chip chip2">AI Signal Engine</span>
+          <span class="float-chip chip3">Narrative Volatility</span>
+
+          <div class="wave">
+            <svg viewBox="0 0 500 260" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="1">
+                  <stop stop-color="#ef4444"/>
+                  <stop offset=".45" stop-color="#2563eb"/>
+                  <stop offset="1" stop-color="#06b6d4"/>
+                </linearGradient>
+              </defs>
+              <path class="p1" d="M10 130 C 80 30, 150 230, 230 110 S 360 30, 490 140"/>
+              <path class="p2" d="M10 160 C 90 80, 160 210, 250 150 S 390 90, 490 175"/>
+              <path class="p3" d="M10 100 C 100 170, 160 40, 245 105 S 390 190, 490 85"/>
+            </svg>
+          </div>
+
+          <div class="emotion-node fear">FEAR</div>
+          <div class="emotion-node greed">GREED</div>
+          <div class="emotion-node vol">VOL</div>
+          <div class="emotion-node signal">ALPHA</div>
+          <div class="emotion-node core">SIGNAL</div>
+
+          <div class="status-card">
+            <strong>Sentient Signals / Market Emotion Runtime</strong>
+            <p>Reading sentiment, pressure, volatility, narratives, liquidity stress, and behavioral shifts across market environments.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container split">
+        <div class="statement big">
+          <h3>Markets are not only charts. They are emotional systems.</h3>
+          <p>Sentient Signals is designed to observe the invisible layer behind candles: fear, greed, conviction, panic, hype, fatigue, crowd behavior, and narrative acceleration.</p>
+        </div>
+        <div class="statement">
+          <h3>Built for SOVRA-driven decision intelligence</h3>
+          <p>Inside the ecosystem, Sentient Signals can feed SOVRA agents, trading dashboards, risk engines, alerts, portfolio systems, and future autonomous analysis workflows.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">Core Features</div>
+          <h2>An AI signal architecture for sentiment, emotion, volatility, and market behavior.</h2>
+          <p class="section-text">Sentient Signals combines multi-source market data with emotional analysis, social intelligence, news pressure, volatility regimes, and AI-generated trading context.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card"><div class="icon">01</div><h3>Emotion-Aware Sentiment</h3><p>Detect fear, greed, euphoria, panic, frustration, crowd confidence, and sentiment extremes across market sources.</p></article>
+          <article class="card"><div class="icon">02</div><h3>Narrative Detection</h3><p>Track rising narratives, news pressure, social momentum, token-specific attention, and sudden shifts in market conversation.</p></article>
+          <article class="card"><div class="icon">03</div><h3>Volatility Intelligence</h3><p>Map volatility stress, liquidation pressure, trend exhaustion, breakout risk, and emotional overextension.</p></article>
+          <article class="card"><div class="icon">04</div><h3>AI Signal Scoring</h3><p>Generate structured signal scores combining sentiment, technical context, liquidity, news, and behavioral data.</p></article>
+          <article class="card"><div class="icon">05</div><h3>Risk & Position Context</h3><p>Support portfolio dashboards, LTV risk, collateral stress, stop-loss discipline, and scenario-based decision planning.</p></article>
+          <article class="card"><div class="icon">06</div><h3>SOVRA Agent Integration</h3><p>Feed SOVRA trading agents with market emotion, alerts, signal summaries, and reasoning-ready context.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">How It Works</div>
+          <h2>From raw market noise to structured emotional intelligence.</h2>
+          <p class="section-text">Sentient Signals follows a four-layer workflow: ingest, interpret, score, and guide.</p>
+        </div>
+
+        <div class="process">
+          <div class="process-step"><strong>Step 01</strong><h3>Ingest</h3><p>Collect price action, order flow context, news, social signals, volatility, wallet flows, and macro pressure.</p></div>
+          <div class="process-step"><strong>Step 02</strong><h3>Interpret</h3><p>Classify emotional tone, crowd behavior, narrative strength, fear/greed intensity, and risk regime.</p></div>
+          <div class="process-step"><strong>Step 03</strong><h3>Score</h3><p>Generate signal scores for bullish pressure, bearish pressure, volatility risk, narrative heat, and reversal danger.</p></div>
+          <div class="process-step"><strong>Step 04</strong><h3>Guide</h3><p>Provide SOVRA-ready summaries, alerts, dashboards, scenario planning, and decision-support intelligence.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ecosystem">
+      <div class="container">
+        <div class="dark-band stack">
+          <div>
+            <div class="kicker">SOVRA / Entelekron Ecosystem</div>
+            <h2>The emotional market intelligence layer for SOVRA and TVK trading infrastructure.</h2>
+            <p class="section-text">Sentient Signals connects market psychology to SOVRA reasoning, GraphVAULT memory, ChronoSeal proofing, EnteleSCAN analytics, EnteleVAULT protected data, and future trading dashboards.</p>
+          </div>
+          <div class="layers">
+            <div class="layer"><span>SOVRA Core</span><span>Reasoning · Agents · Decisions</span></div>
+            <div class="layer"><span>GraphVAULT</span><span>Market Memory · Narrative History</span></div>
+            <div class="layer"><span>ChronoSeal</span><span>Timestamped Signals · Audit</span></div>
+            <div class="layer"><span>EnteleSCAN</span><span>On-Chain Analytics · Network Signals</span></div>
+            <div class="layer"><span>EnteleVAULT</span><span>Private Strategy · Portfolio Context</span></div>
+            <div class="layer"><span>Cerebthra</span><span>Cognitive Scoring · Reasoning Paths</span></div>
+            <div class="layer"><span>TVK Trading Stack</span><span>Alerts · Dashboards · Automation</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="usecases">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">Use Cases</div>
+          <h2>Designed for traders, AI agents, analysts, funds, and high-risk decision environments.</h2>
+          <p class="section-text">Sentient Signals can support trading dashboards, crypto analytics, risk planning, portfolio monitoring, emotional market alerts, and AI-assisted research.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card"><div class="icon">BTC</div><h3>Crypto Market Signals</h3><p>Track BTC, ETH, SUI, XRP, ADA, altcoin narratives, market cycles, social pressure, and volatility regimes.</p></article>
+          <article class="card"><div class="icon">RISK</div><h3>Risk & LTV Monitoring</h3><p>Support collateral stress, liquidation risk, leverage exposure, scenario planning, and position discipline.</p></article>
+          <article class="card"><div class="icon">AI</div><h3>AI Trading Assistant</h3><p>Give SOVRA agents structured emotional and technical context for decision-support workflows.</p></article>
+          <article class="card"><div class="icon">NEWS</div><h3>News Pressure Engine</h3><p>Detect market-moving headlines, emotional language, policy pressure, exchange news, and macro catalysts.</p></article>
+          <article class="card"><div class="icon">SOC</div><h3>Social Narrative Tracking</h3><p>Measure social attention, hype, panic, influencer narratives, crowd fatigue, and community conviction.</p></article>
+          <article class="card"><div class="icon">PRO</div><h3>Institutional Research</h3><p>Provide sentiment dashboards, market psychology reports, signal archives, and audit-ready analytics.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">Roadmap</div>
+          <h2>From signal concept to AI-powered market intelligence platform.</h2>
+        </div>
+
+        <div class="timeline">
+          <div class="step"><strong>Phase 01</strong><div><h3>Signal Architecture</h3><p>Define data sources, emotional categories, scoring models, dashboards, and SOVRA integration paths.</p></div></div>
+          <div class="step"><strong>Phase 02</strong><div><h3>Prototype Dashboard</h3><p>Build sentiment panels, token watchlists, volatility alerts, narrative heatmaps, and risk summaries.</p></div></div>
+          <div class="step"><strong>Phase 03</strong><div><h3>SOVRA Agent Integration</h3><p>Connect AI reasoning, portfolio context, signal summaries, scenario planning, and alert automation.</p></div></div>
+          <div class="step"><strong>Phase 04</strong><div><h3>Professional Platform</h3><p>Expand toward API access, institutional reports, verified signal history, and advanced trading intelligence.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="cta">
+          <div>
+            <div class="kicker">Sentient Signals Network</div>
+            <h2>Build emotion-aware trading intelligence with SOVRA.</h2>
+            <p>For AI trading teams, crypto analysts, quant developers, funds, data providers, exchange partners, and SOVRA / Entelekron ecosystem collaborators.</p>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="mailto:team@sentientsignals.io">Contact Sentient Signals</a>
+            <a class="btn" href="https://www.sovra.network/">SOVRA Network</a>
+            <a class="btn" href="https://www.tvk.group/">T.V.K. Group</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <div>© 2026 Sentient Signals | A SOVRA / Entelekron Emotion-Aware Trading Intelligence Module.</div>
+      <div class="footer-links">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/disclaimer.html">Disclaimer</a>
+        <a href="https://www.sovra.network/">SOVRA</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const mobileToggle = document.querySelector('[data-mobile-toggle]');
+    const mobileMenu = document.querySelector('[data-mobile-menu]');
+    const languageSelects = document.querySelectorAll('[data-language-select]');
+
+    if (mobileToggle && mobileMenu) {
+      mobileToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        mobileToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      mobileMenu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          document.body.classList.remove('menu-open');
+          mobileToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+    languageSelects.forEach((select) => {
+      select.addEventListener('change', (event) => {
+        const target = event.target.value;
+        if (target) window.location.href = target;
+      });
+    });
+  </script>
+</body>
+</html>
